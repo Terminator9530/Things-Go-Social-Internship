@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Car Dashboard</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <style>
+        #needle {
+            display: inline-block;
+            width: 130px;
+            position: absolute;
+            top: 435px;
+            left: 768px;
+            height: 5px;
+            background-color: white;
+            transform: rotateZ(180deg);
+            border-top-right-radius: 50%;
+            border-bottom-right-radius: 50%;
+            transform-origin: left;
+        }
+
+        #circle {
+            border-radius: 50%;
+            background-color: red;
+            width: 25px;
+            height: 25px;
+            display: inline-block;
+            position: absolute;
+            top: 423px;
+            left: 756px;
+        }
+
+        html,
+        body {
+            min-height: 100% !important;
+            height: 100%;
+            margin: 0;
+        }
+
+        img {
+            top: 250px;
+            position: relative;
+        }
+    </style>
+</head>
+
+<body>
+    <div style="position: relative;background-color: grey;height:100%;">
+        <center><img src="speedometer.png" width="25%"></center>
+        <span id="needle"></span>
+        <span id="circle"></span>
+    </div>
+    <script>
+        var count = 0,
+            timer;
+        $(document).ready(function () {
+            timer = setInterval(function () {
+                if (count > 6) {
+                    clearInterval(timer);
+                    myMove(180);
+                } else {
+                    $.get("data.json", function (data, status) {
+                        if (status == "success") {
+                            var angle = (data[count]["speed"] / 10) * 18 + 180;
+                            console.log(count);
+                            count++;
+                            myMove(angle);
+                        }
+                    });
+                }
+            }, 2000);
+        });
+        var prev=180;
+        function myMove(angle) {
+            var elem =  document.getElementById("needle");
+            var pos = prev;
+            var id = setInterval(frame, 10+20/Math.abs(angle-prev));
+
+            function frame() {
+                if (pos == angle) {
+                    clearInterval(id);
+                    prev=angle;
+                } else {
+                    if(angle>=prev)
+                    pos++;
+                    else
+                    pos--;
+                    elem.style.transform =
+                                `rotateZ(${pos}deg)`;
+                }
+            }
+        }
+    </script>
+</body>
+
+</html>
