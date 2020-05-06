@@ -38,20 +38,21 @@
             height: 100%;
             margin: 0;
         }
-
+        center{
+            display: inline;
+        }
         img {
             top: 250px;
-            position: relative;
+            left: 580px;
+            position: absolute;
         }
     </style>
 </head>
 
 <body>
-    <div style="position: relative;background-color: grey;height:100%;">
-        <center><img src="speedometer.png" width="25%"></center>
+        <center><img src="speedometer.png" width="384"></center>
         <span id="needle"></span>
         <span id="circle"></span>
-    </div>
     <script>
         var count = 0,
             timer;
